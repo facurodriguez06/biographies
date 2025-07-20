@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matching Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fcf9f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      gap: 5rem;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .item {
+      background-color: #e9edff;
+      padding: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, outline 0.3s;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .item:hover {
+      background-color: #dbe5ff;
+    }
+
+    .item.correct {
+      background-color: #c7f9cc !important;
+    }
+
+    .item.incorrect {
+      background-color: #ffc9c9 !important;
+    }
+
+    .item.selected {
+      outline: 3px solid #90a4fd;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <h1>Match the Phrases with Their Meanings</h1>
+  <div class="container">
+    <div class="column" id="phrases">
+      <div class="item" data-id="0">be born</div>
+      <div class="item" data-id="1">go to primary school</div>
+      <div class="item" data-id="2">go to secondary school</div>
+      <div class="item" data-id="3">leave school</div>
+      <div class="item" data-id="4">go to university</div>
+      <div class="item" data-id="5">get a job</div>
+      <div class="item" data-id="6">fall in love</div>
+      <div class="item" data-id="7">marry sb / get married</div>
+      <div class="item" data-id="8">have children</div>
+      <div class="item" data-id="9">separate</div>
+      <div class="item" data-id="10">divorce sb / get divorced</div>
+      <div class="item" data-id="11">retire</div>
+      <div class="item" data-id="12">die</div>
+    </div>
+    <div class="column" id="definitions">
+      <div class="item" data-id="7">Establecer una relación legal y formal con otra persona.</div>
+      <div class="item" data-id="11">Dejar de trabajar por haber llegado a la edad establecida.</div>
+      <div class="item" data-id="12">El final de la vida.</div>
+      <div class="item" data-id="6">Tener sentimientos románticos por alguien.</div>
+      <div class="item" data-id="3">Se refiere a terminar los estudios obligatorios.</div>
+      <div class="item" data-id="2">Educación posterior a la primaria, normalmente desde los 11 o 12 años.</div>
+      <div class="item" data-id="0">Nacer.</div>
+      <div class="item" data-id="5">Generalmente sucede después de estudiar o al dejar la escuela.</div>
+      <div class="item" data-id="8">Convertirse en padre o madre.</div>
+      <div class="item" data-id="1">Es el primer nivel de educación formal, desde los 5 o 6 años.</div>
+      <div class="item" data-id="10">Terminar legalmente un matrimonio.</div>
+      <div class="item" data-id="9">Terminar una relación de pareja sin divorcio formal.</div>
+      <div class="item" data-id="4">Educación superior, luego de terminar la secundaria.</div>
+    </div>
+  </div>
+
+  <script>
+    let selectedPhrase = null;
+
+    document.querySelectorAll("#phrases .item").forEach(phrase => {
+      phrase.addEventListener("click", () => {
+        if (selectedPhrase) selectedPhrase.classList.remove("selected");
+        selectedPhrase = phrase;
+        selectedPhrase.classList.add("selected");
+      });
+    });
+
+    document.querySelectorAll("#definitions .item").forEach(def => {
+      def.addEventListener("click", () => {
+        if (!selectedPhrase) return;
+
+        const phraseId = selectedPhrase.dataset.id;
+        const defId = def.dataset.id;
+
+        if (phraseId === defId) {
+          selectedPhrase.classList.remove("selected");
+          selectedPhrase.classList.add("correct");
+          def.classList.add("correct");
+          selectedPhrase = null;
+        } else {
+          selectedPhrase.classList.add("incorrect");
+          def.classList.add("incorrect");
+          setTimeout(() => {
+            selectedPhrase.classList.remove("incorrect");
+            def.classList.remove("incorrect");
+            selectedPhrase.classList.remove("selected");
+            selectedPhrase = null;
+          }, 2000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
